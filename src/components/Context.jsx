@@ -11,7 +11,7 @@ function Context({children}) {
 
 
   return (
-    <CalendarDataContext.Provider>
+    <CalendarDataContext.Provider value={null}>
         {children}
     </CalendarDataContext.Provider>
   )

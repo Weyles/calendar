@@ -1,19 +1,18 @@
 import React from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCalendar,
   faAngleLeft,
   faAngleRight,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import "./header.css";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
+import { Picker } from "./date-picker";
 
-export default function Header() {
+const Header = () => {
   return (
     <Container fluid>
       <Row>
@@ -24,21 +23,21 @@ export default function Header() {
         </Col>
         <Col className="d-flex justify-content-end">
           <ButtonGroup aria-label="Basic example">
-            <Button variant="outline-dark">
+            <Button variant="outline-secondary">
               <FontAwesomeIcon icon={faAngleLeft} />
             </Button>
-            <Button variant="outline-dark" active>
+            <Button variant="outline-secondary" active>
               DATA
             </Button>
-            <Button variant="outline-dark">
+            <Button variant="outline-secondary">
               <FontAwesomeIcon icon={faAngleRight} />
             </Button>
           </ButtonGroup>
-            <Button className="calendar-button" variant="outline-dark">
-              <FontAwesomeIcon icon={faCalendar} />
-            </Button>
+          <Picker />
         </Col>
       </Row>
     </Container>
   );
 }
+
+export {Header}

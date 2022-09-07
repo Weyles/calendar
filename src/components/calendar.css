@@ -1,0 +1,17 @@
+.item {
+  background-color: rgba(255, 255, 255, 1) !important;
+  height: 150px;
+}
+
+.item:hover {
+  background-color: rgb(237, 237, 237) !important;
+}
+
+.current-date-item {
+  background-color: rgb(31 98 238) !important;
+  color: white !important;
+}
+
+.current-date-item:hover {
+  background-color: rgb(23, 87, 226) !important;
+}

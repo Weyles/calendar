@@ -1,49 +1,49 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
-import { useCalendarDataContext } from "./context";
 import { useState } from "react";
-import {
-  isLeapYear,
-  areEqual,
-  getDaysInMonth,
-  getDayOfWeek,
-  getMonthData,
-} from "../utility/functions";
+import { Item } from "./item";
+import { NAMES_OF_DAYS } from "../utility/constants";
+import "./calendar.css";
+import { areEqual, getDayOfWeek, getMonthData } from "../utility/functions";
+import { useCalendarDataContext } from "./context";
 
 const Calendar = () => {
-  const [date, setDate] = useState(new Date());
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [currentDate] = useState(new Date());
 
-  const getYearFunc = () => {
-    console.log("DATA_YEAR:", date.getFullYear());
-    return date.getFullYear();
+  const { date, setSelectedDate } = useCalendarDataContext();
+
+  const monthDate = getMonthData(date.getFullYear(), date.getMonth());
+
+  const handleDayClick = (event, date) => {
+    event.preventDefault();
+    setSelectedDate(date);
   };
-
-  const getMonthFunc = () => {
-    console.log("DATA_MONTH:", date.getMonth());
-    return date.getMonth();
-  };
-
-  const getDayFunc = () => {
-    console.log("DATA_DAY:", date.getDate());
-    return date.getDate();
-  };
-
-  const month = getMonthData(getYearFunc(), getMonthFunc());
 
   return (
-    <Container fluid>
+    <Container>
       <Table striped bordered hover>
         <tbody>
-          {month.map((week, index) => (
+          {monthDate.map((week, index) => (
             <tr key={index}>
-              {week.map((date, index) =>
-                date ? (
-                  <td key={index}>{date.getDate()}</td>
+              {week.map((dateInWeek, index) =>
+                dateInWeek ? (
+                  <td
+                    onClick={(event) => handleDayClick(event, dateInWeek)}
+                    className={
+                      areEqual(currentDate, dateInWeek)
+                        ? "current-date-item"
+                        : "item"
+                    }
+                    key={index}
+                  >
+                    <Item
+                      data={dateInWeek.getDate()}
+                      day={NAMES_OF_DAYS[getDayOfWeek(dateInWeek)]}
+                    />
+                  </td>
                 ) : (
-                  <td key={index}></td>
+                  <td className="" key={index}></td>
                 )
               )}
             </tr>

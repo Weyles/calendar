@@ -1,5 +1,7 @@
 const DAYS_IN_WEEK = 7;
 
+const MONTH_IN_YEAR = 11;
+
 const LEAP_FEBRUARY = 29;
 
 const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -23,6 +25,21 @@ const MONTH_NAMES = [
   "December",
 ];
 
+const SHORT_MONTH_NAMES = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 const MONTH_NUMBERS = {
   January: 0,
   February: 1,
@@ -38,15 +55,17 @@ const MONTH_NUMBERS = {
   December: 11,
 };
 
-const WEEK_DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const NAMES_OF_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export {
   DAYS_IN_WEEK,
-  WEEK_DAY_NAMES,
+  NAMES_OF_DAYS,
   DAYS_IN_MONTH,
   WEEK_DAYS_FROM_MONDAY,
   YEARS,
   MONTH_NAMES,
   MONTH_NUMBERS,
   LEAP_FEBRUARY,
+  SHORT_MONTH_NAMES,
+  MONTH_IN_YEAR,
 };

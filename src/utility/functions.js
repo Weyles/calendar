@@ -4,6 +4,8 @@ import {
   LEAP_FEBRUARY,
   WEEK_DAYS_FROM_MONDAY,
   DAYS_IN_WEEK,
+  SHORT_MONTH_NAMES,
+  MONTH_NAMES,
 } from "./constants";
 
 const isLeapYear = (year) => {
@@ -33,14 +35,24 @@ const getDaysInMonth = (date) => {
 };
 
 const getDayOfWeek = (date) => {
-  const dayOfWeek = date.getDate();
+  const dayOfWeek = date.getDay();
 
   return WEEK_DAYS_FROM_MONDAY[dayOfWeek];
 };
 
+const getShortMonth = (date) => {
+  const shortMonth = date.getMonth();
+
+  return SHORT_MONTH_NAMES[shortMonth];
+};
+
+const getMonth = (date) => {
+  const month = date.getMonth();
+
+  return MONTH_NAMES[month];
+};
+
 const getMonthData = (year, month) => {
-  console.log("YEAR:", year);
-  console.log("MONTH:", month);
   const result = [];
   const date = new Date(year, month);
   const daysInMonth = getDaysInMonth(date);
@@ -59,9 +71,29 @@ const getMonthData = (year, month) => {
     }
   }
 
-  console.log(result)
+  return result;
+};
+
+const getYearData = (year) => {
+  const result = [];
+  let monthNumer = 0;
+
+  for (let i = 0; i < 4; i++) {
+    result[i] = [];
+
+    for (let j = 0; j < 3; j++) {
+      result[i][j] = new Date(year, monthNumer++);
+    }
+  }
 
   return result;
 };
 
-export { isLeapYear, areEqual, getDaysInMonth, getDayOfWeek, getMonthData };
+export {
+  areEqual,
+  getDayOfWeek,
+  getMonthData,
+  getShortMonth,
+  getMonth,
+  getYearData,
+};

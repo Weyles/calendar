@@ -2,59 +2,47 @@ import React, { useState } from "react";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Popover, OverlayTrigger, Button } from "react-bootstrap";
-import { useCalendarDataContext } from "./context";
+import { useCalendarDataContext } from "../../context/context";
+import { areDateEqual, findEvent } from "../../utility/functions";
 
-const Event = () => {
-  const [inputValue, setInputValue] = useState("");
+const AddEventForm = () => {
+  const [titleValue, setTitleValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
   const [dateValue, setDateValue] = useState("");
   const [timeValue, setTimeValue] = useState("");
 
-  const { events, setEvents } = useCalendarDataContext();
+  const { data, eventItems, setEventItems, addNewEventItem } =
+    useCalendarDataContext();
 
-  const handleInput = (event) => {
-    setInputValue(event.target.value);
+  const handleInput = (e) => {
+    setTitleValue(e.target.value);
   };
-  const handleDescription = (event) => {
-    setDescriptionValue(event.target.value);
+  const handleDescription = (e) => {
+    setDescriptionValue(e.target.value);
   };
-  const handleDate = (event) => {
-    console.log(event.target.value);
-    setDateValue(event.target.value);
+  const handleDate = (e) => {
+    setDateValue(e.target.value);
   };
-  const handleTime = (event) => {
-    setTimeValue(event.target.value);
+  const handleTime = (e) => {
+    setTimeValue(e.target.value);
   };
 
-  const handleButton = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const isDateEqual = events.find((item) => {
-      return String(item.date) === String(new Date(dateValue));
-    });
-
-    if (!isDateEqual) {
-      setEvents([
-        ...events,
-        {
-          date: new Date(dateValue),
-          title: inputValue,
-          description: descriptionValue,
-          time: timeValue,
-        },
-      ]);
-    }
+    addNewEventItem(titleValue, descriptionValue, dateValue, timeValue);
   };
 
   return (
     <OverlayTrigger
       trigger="click"
+      rootClose
       placement={"bottom"}
       overlay={
         <Popover id={`popover-positioned-${"bottom"}`}>
           <Popover.Header as="h3">Add new event</Popover.Header>
           <Popover.Body>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
@@ -64,8 +52,9 @@ const Event = () => {
                 </Form.Label>
                 <Form.Control
                   onChange={handleInput}
-                  value={inputValue}
+                  value={titleValue}
                   type="text"
+                  required
                 />
               </Form.Group>
               <Form.Group
@@ -89,6 +78,7 @@ const Event = () => {
                   onChange={handleDate}
                   value={dateValue}
                   type="date"
+                  required
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGridCity">
@@ -101,7 +91,7 @@ const Event = () => {
                   type="time"
                 />
               </Form.Group>
-              <Button onClick={handleButton} className="mt-3" type="submit">
+              <Button className="mt-3" type="submit">
                 Save
               </Button>
             </Form>
@@ -116,4 +106,4 @@ const Event = () => {
   );
 };
 
-export { Event };
+export { AddEventForm };

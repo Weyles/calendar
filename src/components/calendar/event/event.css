@@ -1,0 +1,21 @@
+.event-text-block {
+  font-size: 12px;
+  margin: 5px -6px 0 -6px;
+  padding: 0 3px 0 3px;
+  border-radius: 5px;
+}
+
+.event-text-block:hover {
+  background-color: rgb(170, 170, 170);
+}
+
+.current-date-event-text-block {
+  font-size: 12px;
+  margin: 5px -6px 0 -6px;
+  padding: 0 3px 0 3px;
+  border-radius: 5px;
+}
+
+.current-date-event-text-block:hover {
+  background-color: rgb(16, 75, 204);
+}

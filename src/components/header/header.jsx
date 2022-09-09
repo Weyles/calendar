@@ -1,11 +1,11 @@
 import React from "react";
-import { Event } from "./event";
+import { AddEventForm } from "./add-event-form";
 import { ButtonGroup, Container, Col, Button, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Picker } from "./date-picker";
-import { getMonth } from "../utility/functions";
-import { useCalendarDataContext } from "./context";
+import { getMonth } from "../../utility/functions";
+import { useCalendarDataContext } from "../../context/context";
 
 const Header = () => {
   const { date, setDate, day, year, month } = useCalendarDataContext();
@@ -32,7 +32,7 @@ const Header = () => {
     <Container fluid>
       <Row>
         <Col>
-          <Event />
+          <AddEventForm />
         </Col>
         <Col className="d-flex justify-content-end">
           <ButtonGroup aria-label="Basic example">

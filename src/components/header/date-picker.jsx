@@ -1,8 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCalendarDataContext } from "./context";
-import { getYearData } from "../utility/functions";
-import { SHORT_MONTH_NAMES } from "../utility/constants";
+import { useCalendarDataContext } from "../../context/context";
+import { getYearData } from "../../utility/functions";
+import { SHORT_MONTH_NAMES } from "../../utility/constants";
 import {
   ButtonGroup,
   Popover,
@@ -24,20 +24,14 @@ const Picker = () => {
 
   const handlePrevYearButtonClick = (event) => {
     event.preventDefault();
-    if (year() === 2020) {
-      setDate(new Date(2025, month()));
-    } else {
-      setDate(new Date(year() - 1, month()));
-    }
+
+    setDate(new Date(year() - 1, month()));
   };
 
   const handleNextYearButtonClick = (event) => {
     event.preventDefault();
-    if (year() === 2025) {
-      setDate(new Date(2020, month()));
-    } else {
-      setDate(new Date(year() + 1, month()));
-    }
+
+    setDate(new Date(year() + 1, month()));
   };
 
   const handleMonthClick = (event, month) => {
@@ -49,22 +43,21 @@ const Picker = () => {
   return (
     <OverlayTrigger
       trigger="click"
+      rootClose
       placement={"bottom"}
       overlay={
         <Popover id={`popover-positioned-${"bottom"}`}>
           <Popover.Header className="d-flex justify-content-around" as="h3">
             <ButtonGroup aria-label="Basic example">
-
               <Button onClick={handlePrevYearButtonClick} variant="primary">
                 <FontAwesomeIcon icon={faAngleLeft} />
               </Button>
 
               <Button variant="primary">{year()}</Button>
-              
+
               <Button onClick={handleNextYearButtonClick} variant="primary">
                 <FontAwesomeIcon icon={faAngleRight} />
               </Button>
-
             </ButtonGroup>
           </Popover.Header>
           <Popover.Body>

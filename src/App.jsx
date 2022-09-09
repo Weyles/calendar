@@ -1,6 +1,6 @@
-import { Context } from "./components/context";
-import { Header } from "./components/header";
-import { Calendar } from "./components/calendar";
+import { Context } from "./context/context";
+import { Header } from "./components/header/header";
+import { Calendar } from "./components/calendar/calendar";
 import Card from "react-bootstrap/Card";
 
 function App() {

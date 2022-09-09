@@ -61,16 +61,26 @@ const getMonthData = (year, month) => {
 
   for (let i = 0; i < (daysInMonth + monthStartsOn) / DAYS_IN_WEEK; i++) {
     result[i] = [];
-
+    // debugger
     for (let j = 0; j < DAYS_IN_WEEK; j++) {
       if ((i === 0 && j < monthStartsOn) || day > daysInMonth) {
+        // console.log("UNDEFINED");
         result[i][j] = undefined;
       } else {
-        result[i][j] = new Date(year, month, day++);
+        // const dayWithEvent = findEvent(events, new Date(year, month, day));
+
+        // if (!dayWithEvent) {
+        //   // console.log("Empty event");
+        result[i][j] = { date: new Date(year, month, day++) };
+        // } else {
+        //   result[i][j] = dayWithEvent;
+        //   day++;
+        // }
       }
     }
   }
 
+  // console.log("Ready array:", result);
   return result;
 };
 
@@ -89,6 +99,104 @@ const getYearData = (year) => {
   return result;
 };
 
+const findEvent = (events, date) => {
+  // console.log("DATE", date);
+  // console.log("EVENTS", events)
+  const event = events.find((event) => {
+    return areDateEqual(date, event.date);
+  });
+
+  return event;
+};
+
+const findItem = (items, date) => {
+  // console.log("DATE", date);
+  // console.log("ITEMS", items);
+  const item = items.find((item) => {
+    return areDateEqual(date, item.date);
+  });
+  // console.log("ITEM!!!!:", item);
+  return item;
+};
+
+const getStringDate = (date) => {
+  let day = date.getDate();
+  let month = date.getMonth();
+  let year = date.getFullYear();
+
+  if (month < 10) {
+    month++
+    month = "0" + month;
+  }
+  if (day < 10) {
+    day = "0" + day;
+  }
+  const dateString = `${year}-${month}-${day}`;
+
+  console.log(dateString)
+  return dateString;
+};
+
+const areDateEqual = (firstDate, secondDate) => {
+  // console.log("first", firstDate)
+  // console.log("second", secondDate)
+  if (
+    firstDate.getFullYear() === secondDate.getFullYear() &&
+    firstDate.getMonth() === secondDate.getMonth() &&
+    firstDate.getDate() === secondDate.getDate()
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+// const getDataEvents = () => {
+//   const dataWithEvents = data.map((week) => {
+//     console.log(week);
+//     const weekWithEvents = week.map((day) => {
+//       const event = events.find((event) => {
+//         return (
+//           day.date.getFullYear() === event.date.getFullYear() &&
+//           day.date.getMonth() === event.date.getMonth() &&
+//           day.date.getDate() === event.date.getDate()
+//         );
+//       });
+
+//       if (!!event) {
+//         return {
+//           date: event.date,
+//           title: event.title,
+//           description: event.description,
+//           time: event.time,
+//         };
+//       }
+//       // console.log("DAYYY", day);
+//       // if (day === undefined) {
+//       //   return undefined;
+//       // } else if (
+//       //   day.date.getFullYear() === new Date(dateValue).getFullYear() &&
+//       //   day.date.getMonth() === new Date(dateValue).getMonth() &&
+//       //   day.date.getDate() === new Date(dateValue).getDate()
+//       // ) {
+//       //   return {
+//       //     date: new Date(dateValue),
+//       //     title: titleValue,
+//       //     description: descriptionValue,
+//       //     time: timeValue,
+//       //   };
+//       // } else {
+//       //   return {
+//       //     date: day.date,
+//       //   };
+//       // }
+//     });
+
+//     return weekWithEvents;
+//   });
+//   return dataWithEvents;
+// };
+
 export {
   areEqual,
   getDayOfWeek,
@@ -96,4 +204,10 @@ export {
   getShortMonth,
   getMonth,
   getYearData,
+  getDaysInMonth,
+  findEvent,
+  getStringDate,
+  areDateEqual,
+  findItem,
+  // getDataEvents,
 };

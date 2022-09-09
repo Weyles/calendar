@@ -1,0 +1,10 @@
+.item {
+  background-color: rgba(255, 255, 255, 1) !important;
+  height: 160px;
+  width: 150px;
+}
+
+.current-date-item {
+  background-color: rgb(31 98 238) !important;
+  color: white !important;
+}

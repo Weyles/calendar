@@ -1,14 +1,10 @@
 const DAYS_IN_WEEK = 7;
 
-const MONTH_IN_YEAR = 11;
-
 const LEAP_FEBRUARY = 29;
 
 const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 const WEEK_DAYS_FROM_MONDAY = [6, 0, 1, 2, 3, 4, 5];
-
-const YEARS = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2027];
 
 const MONTH_NAMES = [
   "January",
@@ -62,10 +58,8 @@ export {
   NAMES_OF_DAYS,
   DAYS_IN_MONTH,
   WEEK_DAYS_FROM_MONDAY,
-  YEARS,
   MONTH_NAMES,
   MONTH_NUMBERS,
   LEAP_FEBRUARY,
   SHORT_MONTH_NAMES,
-  MONTH_IN_YEAR,
 };

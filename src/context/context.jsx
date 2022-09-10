@@ -36,25 +36,7 @@ const useCalendarDataContext = () => {
 const Context = ({ children }) => {
   const [date, setDate] = useState(new Date()); // Date what shows in calendar
   const [load, setLoad] = useState(false); // If false display loader
-  const [eventItems, setEventItems] = useState([
-    {
-      date: new Date(date),
-      events: [
-        {
-          id: new Date().getTime(),
-          title: "Task #1",
-          description: "Read README.md file",
-          time: "18:43",
-        },
-        {
-          id: new Date().getTime() + 1,
-          title: "Task #2",
-          description: "Сall the author for an interview :)",
-          time: "18:59",
-        },
-      ],
-    },
-  ]); // Array of event items
+  const [eventItems, setEventItems] = useState([]); // Array of event items
 
   useEffect(() => {
     /*
@@ -133,7 +115,8 @@ const Context = ({ children }) => {
       /*
           If we didn't find array of event items we create a new one
       */
-      setEventItems([...eventItems, eventItem]);
+      console.log([eventItem]);
+      setEventItems([eventItem]);
       localStorageSet("eventItems", [...eventItems, eventItem]);
     } else {
       /*
@@ -202,7 +185,8 @@ const Context = ({ children }) => {
     /*
         Create a copy of event item and push new event inside
     */
-    const modifiedEventItem = item.events.push({
+    const modifiedEventItem = item;
+    modifiedEventItem.events.push({
       id: new Date().getTime(),
       title: title,
       description: description,

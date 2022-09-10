@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCalendarDataContext } from "../../context/context";
 import { getYearData } from "../../utility/functions";
 import { SHORT_MONTH_NAMES } from "../../utility/constants";
+import { localStorageSet } from "../../utility/local-store";
 import {
   ButtonGroup,
   Popover,
@@ -18,26 +19,42 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Picker = () => {
-  const { date, setDate, year, month } = useCalendarDataContext();
+  const { date, setDate } = useCalendarDataContext(); // Get data from Context component
 
-  const yearDate = getYearData(date.getFullYear());
+  const yearDate = getYearData(date.getFullYear()); // Get array of month in select year
 
+  /*
+      Set the date of the previous year
+  */
   const handlePrevYearButtonClick = (event) => {
     event.preventDefault();
 
-    setDate(new Date(year() - 1, month()));
+    const prevYearDate = new Date(date.getFullYear() - 1, date.getMonth()); // Create date of the last year
+
+    setDate(prevYearDate);
+    localStorageSet("date", prevYearDate);
   };
 
+  /*
+      Set the date of the next year
+  */
   const handleNextYearButtonClick = (event) => {
     event.preventDefault();
 
-    setDate(new Date(year() + 1, month()));
+    const nextYearDate = new Date(date.getFullYear() + 1, date.getMonth()); // Create date of the next year
+
+    setDate(nextYearDate);
+    localStorageSet("date", nextYearDate);
   };
 
+  /*
+      Set date of select month
+  */
   const handleMonthClick = (event, month) => {
     event.preventDefault();
 
     setDate(month);
+    localStorageSet("date", month);
   };
 
   return (
@@ -53,7 +70,7 @@ const Picker = () => {
                 <FontAwesomeIcon icon={faAngleLeft} />
               </Button>
 
-              <Button variant="primary">{year()}</Button>
+              <Button variant="primary">{date.getFullYear()}</Button>
 
               <Button onClick={handleNextYearButtonClick} variant="primary">
                 <FontAwesomeIcon icon={faAngleRight} />

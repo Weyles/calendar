@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { useCalendarDataContext } from "../../../context/context";
 import { Event } from "./../event/event";
@@ -6,63 +6,102 @@ import { NAMES_OF_DAYS } from "../../../utility/constants";
 import {
   getDayOfWeek,
   areDateEqual,
-  findItem,
+  findEventItem,
 } from "../../../utility/functions";
+import {
+  localStorageDelete,
+  localStorageSet,
+} from "../../../utility/local-store";
 
 const Item = (props) => {
   const { data } = props;
-  const { eventItems, setEventItems, addNewEventItem } =
-    useCalendarDataContext();
+  const { eventItems, setEventItems, addNewEventItem, deleteEventItem } =
+    useCalendarDataContext(); // Get data from Context component
 
-  const eventItem = findItem(eventItems, data.date);
+  /*
+      Look for some events in this item  
+  */
+  const eventItem = findEventItem(eventItems, data.date);
 
+  /*
+      Delete event or event item
+  */
   const deleteEvent = (id) => {
-    // console.log("ID", id);
-    const eventItemsWithModifiedData = eventItems.map((eventItem) => {
-      // console.log("ITEM", eventItem);
+    /*
+        Create a copy of event items array and delete items inside
+    */
+    const eventItemsWithModifiedData = eventItems
+      .map((eventItem) => {
+        /*
+            Check if there are empty events
+        */
+        if (eventItem.events.length !== 0) {
+          /*
+              Look for a event item with same date of our item date
+          */
+          if (areDateEqual(eventItem.date, data.date)) {
+            /*
+                Delete item by id
+            */
+            const formettedEvents = eventItem.events.filter((event) => {
+              return event.id !== id;
+            });
+            /*
+                  If there are some empty events in item return a null.
+                  After this we will look for a null value for a distant delete in filter method
+            */
+            if (formettedEvents.length !== 0) {
+              /*
+                  In other case we return event item with modified data
+              */
+              const modifiedEventItem = eventItem; // Create copy of our event item
+              modifiedEventItem.events = formettedEvents; // Set value of modified events array
 
-      // console.log("EVENT_ITEM", eventItem.date);
-      // console.log("DATA", data.date);
+              return modifiedEventItem; // Return modified event item
+            }
+          } else {
+            return eventItem;
+          }
+        }
+      })
+      .filter((eventItem) => eventItem !== undefined); // Delete undefined item from event items array
 
-      if (areDateEqual(eventItem.date, data.date)) {
-        // console.log("DATES_ARE_EQUAL");
-        const formettedEvents = eventItem.events.filter((event) => {
-          // console.log("EVENT_ID", event.id);
-
-          return event.id !== id;
-        });
-
-        eventItem.events = formettedEvents;
-
-        // console.log("EVENT_ITEM_W_D_E", eventItem);
-        return eventItem;
-      } else {
-        return eventItem;
-      }
-    });
-
-    // console.log("EVENT_ITEMS_CHANGED", eventItemsWithModifiedData);
-    setEventItems(eventItemsWithModifiedData);
+    /*
+        Check if we have items in event items array
+    */
+    if (eventItemsWithModifiedData.length === 0) {
+      /*
+          If we don't have any event item, set empty array to our event items state
+          and delete all event items from local storage
+      */
+      localStorageDelete("eventItems");
+      setEventItems([]);
+    } else {
+      setEventItems(eventItemsWithModifiedData);
+      localStorageSet("eventItems", eventItemsWithModifiedData);
+    }
   };
 
+  /*
+      Change event data inside event item
+  */
   const changeEvent = (id, date, title, description, time) => {
-    console.log("WORKKK")
-    console.log("DATE_DATE", data.date);
-    console.log("DATE", date);
-
+    /*
+        Check if date of this item is equal with changed event item date
+    */
     if (areDateEqual(data.date, date)) {
-      console.log("FFFFF");
-      // console.log("ID", id);
+      /*
+           Create a copy of event items array and change event item inside
+      */
       const eventItemsWithModifiedData = eventItems.map((eventItem) => {
-        // console.log("ITEM", eventItem);
-
-        console.log("EVENT_ITEM", eventItem.date);
-        console.log("DATA", new Date(date));
-
-        if (areDateEqual(eventItem.date, new Date(date))) {
-          // console.log("DATES_ARE_EQUAL");
+        /*
+            Check if date of event item is equal with changed event item date
+        */
+        if (areDateEqual(eventItem.date, date)) {
+          /*
+              Create a copy of event item and change event inside item 
+          */
           const formettedEvents = eventItem.events.map((event) => {
-            // console.log("EVENT_ID", event.id);
             if (event.id === id) {
               const newEvent = {
                 id: id,
@@ -72,26 +111,39 @@ const Item = (props) => {
                 time: time,
               };
 
-              return newEvent;
+              return newEvent; // Return changed event
             } else {
               return event;
             }
           });
 
-          console.log("FORMATTED", formettedEvents);
-          eventItem.events = formettedEvents;
+          const newEventItem = eventItem; // Create copy of event item
+          newEventItem.events = formettedEvents; // In the copy we change old events to the new one
 
-          // console.log("EVENT_ITEM_W_D_E", eventItem);
-          return eventItem;
+          return newEventItem; // Return modified event item
         } else {
           return eventItem;
         }
       });
 
-      console.log("EVENT_ITEMS_CHANGED", eventItemsWithModifiedData);
       setEventItems(eventItemsWithModifiedData);
+      localStorageSet("eventItems", eventItemsWithModifiedData);
     } else {
-      addNewEventItem(title, description, date, time);
+      /*
+          Check if there are any events
+          If there are no events left in this item, delete this item from event items array
+          And create a new one
+      */
+      if (eventItem.events.length === 1) {
+        deleteEventItem(data.date);
+        addNewEventItem(title, description, date, time);
+      } else {
+        /*
+            If there are some events left, delete choose event by id
+        */
+        deleteEvent(id);
+        addNewEventItem(title, description, date, time);
+      }
     }
   };
 

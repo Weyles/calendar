@@ -9,13 +9,9 @@ import { areEqual, getDayOfWeek, getMonthData } from "../../utility/functions";
 import { useCalendarDataContext } from "../../context/context";
 
 const Calendar = () => {
-  const [currentDate] = useState(new Date());
+  const { data } = useCalendarDataContext(); // Get data from Context component
 
-  const { data } = useCalendarDataContext();
-
-  const handleDayClick = (event, date) => {
-    event.preventDefault();
-  };
+  const currentDate = new Date();
 
   return (
     <Container>
@@ -26,7 +22,6 @@ const Calendar = () => {
               {week.map((dateInWeek, index) =>
                 dateInWeek ? (
                   <td
-                    onClick={(event) => handleDayClick(event, dateInWeek.date)}
                     className={
                       areEqual(currentDate, dateInWeek.date)
                         ? "current-date-item"

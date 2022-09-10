@@ -6,25 +6,53 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Picker } from "./date-picker";
 import { getMonth } from "../../utility/functions";
 import { useCalendarDataContext } from "../../context/context";
+import { localStorageSet } from "../../utility/local-store";
 
 const Header = () => {
-  const { date, setDate, day, year, month } = useCalendarDataContext();
+  const { date, setDate } = useCalendarDataContext(); // Get data from Context component
 
+  /*
+      Cyclically set the date of the previous month in the selected year
+  */
   const handlePrevMonthButtonClick = (event) => {
     event.preventDefault();
-    if (month() === 0) {
-      setDate(new Date(year(), 11));
+
+    /*
+        Check if we have reached the first month
+    */
+    if (date.getMonth() === 0) {
+      const lastMonthOfYear = new Date(date.getFullYear(), 11);
+
+      setDate(lastMonthOfYear);
+      localStorageSet("date", lastMonthOfYear);
     } else {
-      setDate(new Date(year(), month() - 1));
+      const pervMonthDate = new Date(date.getFullYear(), date.getMonth() - 1); // Create date of the last month
+
+      setDate(pervMonthDate);
+      localStorageSet("date", pervMonthDate);
     }
   };
 
+  /*
+      Cyclically set the date of the next month in the selected year
+  */
   const handleNextMonthButtonClick = (event) => {
     event.preventDefault();
-    if (month() === 11) {
-      setDate(new Date(year(), 0));
+
+    /*
+        Check if we have reached the last month
+    */
+    if (date.getMonth() === 11) {
+      const firstMonthOfYear = new Date(date.getFullYear(), 0);
+
+      setDate(firstMonthOfYear);
+      localStorageSet("date", firstMonthOfYear);
     } else {
-      setDate(new Date(year(), month() + 1));
+      const nextMonthDate = new Date(date.getFullYear(), date.getMonth() + 1); // Create date of the next month
+
+      console.log(nextMonthDate);
+      setDate(nextMonthDate);
+      localStorageSet("date", nextMonthDate);
     }
   };
 
@@ -47,7 +75,7 @@ const Header = () => {
               variant="outline-secondary"
               active
             >
-              {`${getMonth(date)} ${year()}`}
+              {`${getMonth(date)} ${date.getFullYear()}`}
             </Button>
             <Button
               onClick={handleNextMonthButtonClick}

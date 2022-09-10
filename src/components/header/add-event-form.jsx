@@ -1,28 +1,31 @@
 import React, { useState } from "react";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Popover, OverlayTrigger, Button } from "react-bootstrap";
 import { useCalendarDataContext } from "../../context/context";
-import { areDateEqual, findEvent } from "../../utility/functions";
 
 const AddEventForm = () => {
   const [titleValue, setTitleValue] = useState("");
   const [descriptionValue, setDescriptionValue] = useState("");
   const [dateValue, setDateValue] = useState("");
   const [timeValue, setTimeValue] = useState("");
+  const [disableButton, setDisableButton] = useState(true);
 
-  const { data, eventItems, setEventItems, addNewEventItem } =
-    useCalendarDataContext();
+  const { addNewEventItem } = useCalendarDataContext(); // Get data from Context component
 
   const handleInput = (e) => {
     setTitleValue(e.target.value);
   };
+
   const handleDescription = (e) => {
+    isDescriptionIsFulfield(e.target);
     setDescriptionValue(e.target.value);
   };
+
   const handleDate = (e) => {
     setDateValue(e.target.value);
   };
+
   const handleTime = (e) => {
     setTimeValue(e.target.value);
   };
@@ -31,6 +34,27 @@ const AddEventForm = () => {
     e.preventDefault();
 
     addNewEventItem(titleValue, descriptionValue, dateValue, timeValue);
+  };
+
+  /*
+      Check if description input is fulfield
+  */
+  const isDescriptionIsFulfield = (description) => {
+    if (description !== "") {
+      setDisableButton(false);
+    } else {
+      setDisableButton(true);
+    }
+  };
+
+  /*
+      Clear description input
+  */
+  const clearDescription = (e) => {
+    e.preventDefault();
+
+    setDescriptionValue("");
+    setDisableButton(true);
   };
 
   return (
@@ -69,6 +93,15 @@ const AddEventForm = () => {
                   value={descriptionValue}
                   as="textarea"
                 />
+                <Button
+                  onClick={clearDescription}
+                  className="mt-3"
+                  variant="success"
+                  size="sm"
+                  disabled={disableButton}
+                >
+                  <FontAwesomeIcon icon={faRotateRight} />
+                </Button>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGridCity">
                 <Form.Label>

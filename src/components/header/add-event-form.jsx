@@ -33,6 +33,10 @@ const AddEventForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setTitleValue("");
+    setDescriptionValue("");
+    setDateValue("");
+    setTimeValue("");
     addNewEventItem(titleValue, descriptionValue, dateValue, timeValue);
   };
 

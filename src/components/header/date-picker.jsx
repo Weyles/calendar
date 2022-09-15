@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCalendarDataContext } from "../../context/context";
 import { getYearData } from "../../utility/functions";
 import { SHORT_MONTH_NAMES } from "../../utility/constants";
-import { localStorageSet } from "../../utility/local-store";
+import { databaseSet } from "../../utility/control";
 import {
   ButtonGroup,
   Popover,
@@ -32,7 +32,7 @@ const Picker = () => {
     const prevYearDate = new Date(date.getFullYear() - 1, date.getMonth()); // Create date of the last year
 
     setDate(prevYearDate);
-    localStorageSet("date", prevYearDate);
+    databaseSet("date", prevYearDate);
   };
 
   /*
@@ -44,7 +44,7 @@ const Picker = () => {
     const nextYearDate = new Date(date.getFullYear() + 1, date.getMonth()); // Create date of the next year
 
     setDate(nextYearDate);
-    localStorageSet("date", nextYearDate);
+    databaseSet("date", nextYearDate);
   };
 
   /*
@@ -54,7 +54,7 @@ const Picker = () => {
     event.preventDefault();
 
     setDate(month);
-    localStorageSet("date", month);
+    databaseSet("date", month);
   };
 
   return (

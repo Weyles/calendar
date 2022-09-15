@@ -3,15 +3,12 @@ import { Col, Row, Container } from "react-bootstrap";
 import { useCalendarDataContext } from "../../../context/context";
 import { Event } from "./../event/event";
 import { NAMES_OF_DAYS } from "../../../utility/constants";
+import { databaseSet, databaseDelete } from "../../../utility/control";
 import {
   getDayOfWeek,
   areDateEqual,
   findEventItem,
 } from "../../../utility/functions";
-import {
-  localStorageDelete,
-  localStorageSet,
-} from "../../../utility/local-store";
 
 const Item = (props) => {
   const { data } = props;
@@ -74,11 +71,11 @@ const Item = (props) => {
           If we don't have any event item, set empty array to our event items state
           and delete all event items from local storage
       */
-      localStorageDelete("eventItems");
+      databaseDelete("eventItems");
       setEventItems([]);
     } else {
       setEventItems(eventItemsWithModifiedData);
-      localStorageSet("eventItems", eventItemsWithModifiedData);
+      databaseSet("eventItems", eventItemsWithModifiedData);
     }
   };
 
@@ -127,7 +124,7 @@ const Item = (props) => {
       });
 
       setEventItems(eventItemsWithModifiedData);
-      localStorageSet("eventItems", eventItemsWithModifiedData);
+      databaseSet("eventItems", eventItemsWithModifiedData);
     } else {
       /*
           Check if there are any events

@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Loader } from "../components/loader/loader";
-import { localStorageGet, localStorageSet } from "../utility/local-store";
 import {
   getMonthData,
   findEventItem,
   areDateEqual,
 } from "../utility/functions";
+import { databaseGet, databaseSet } from "../utility/control";
 
 const CalendarDataContext = createContext(null); // Create context component
 
@@ -21,6 +21,7 @@ const useCalendarDataContext = () => {
     setEventItems,
     addNewEventItem,
     deleteEventItem,
+    valueOfDatabaseUsed,
   } = useContext(CalendarDataContext);
   return {
     data,
@@ -30,6 +31,7 @@ const useCalendarDataContext = () => {
     setEventItems,
     addNewEventItem,
     deleteEventItem,
+    valueOfDatabaseUsed,
   };
 };
 
@@ -37,6 +39,15 @@ const Context = ({ children }) => {
   const [date, setDate] = useState(new Date()); // Date what shows in calendar
   const [load, setLoad] = useState(false); // If false display loader
   const [eventItems, setEventItems] = useState([]); // Array of event items
+
+  /*
+      Depend on selected value we set data to different database
+      Values:
+      1 - use only local storage
+      2 - use only server 
+      3 - use both of them
+  */
+  const valueOfDatabaseUsed = 1;
 
   useEffect(() => {
     /*
@@ -54,33 +65,31 @@ const Context = ({ children }) => {
       Load date and eventItems from localStorage and assign data to the state
    */
   const loadAllData = async () => {
-    await setDateFromLocalStore();
-    await setEventItemsFromLocalStore();
+    await setDateFromDataBase();
+    await setEventItemsFromDataBase();
   };
 
   /*
-      Gett date from the local storage and set it if date was changed once
+      Get date from the local storage / database and set it if date was changed once
   */
-  const setDateFromLocalStore = async () => {
-    const stringDateFromLocalStore = await localStorageGet("date");
+  const setDateFromDataBase = async () => {
+    const stringDateFromDatabase = await databaseGet("date");
 
-    if (!!stringDateFromLocalStore) {
-      const dateFromLocalStore = new Date(stringDateFromLocalStore);
-      setDate(dateFromLocalStore);
-      setLoad(false); // After we got a date we show a calendar
-    } else {
+    if (!!stringDateFromDatabase) {
+      const dateFromDatabase = new Date(stringDateFromDatabase);
+      setDate(dateFromDatabase);
       setLoad(false); // After we got a date we show a calendar
     }
   };
 
   /*
-      Gett event items from the local storage and set it if we create some one
+      Get event items from the local storage / database and set it if we create some one
   */
-  const setEventItemsFromLocalStore = async () => {
-    const eventItemsFromLocalStore = await localStorageGet("eventItems");
+  const setEventItemsFromDataBase = async () => {
+    const eventItemsFromDatabase = await databaseGet("eventItems");
 
-    if (!!eventItemsFromLocalStore) {
-      const formatedData = eventItemsFromLocalStore.map((item) => {
+    if (!!eventItemsFromDatabase) {
+      const formatedData = eventItemsFromDatabase.map((item) => {
         return {
           date: new Date(item.date),
           events: [...item.events],
@@ -109,15 +118,14 @@ const Context = ({ children }) => {
     /*
         Look for an array of event items in the local storage
     */
-    const eventItemsFromLocalStorage = await localStorageGet("eventItems");
+    const eventItemsFromLocalStorage = await databaseGet("eventItems");
 
     if (!eventItemsFromLocalStorage) {
       /*
           If we didn't find array of event items we create a new one
       */
-      console.log([eventItem]);
       setEventItems([eventItem]);
-      localStorageSet("eventItems", [...eventItems, eventItem]);
+      databaseSet("eventItems", [...eventItems, eventItem]);
     } else {
       /*
           In other case we pushing event item in existing array
@@ -145,7 +153,7 @@ const Context = ({ children }) => {
         */
         const modifiedEventItems = [...formatedEventItemsData, eventItem]; // Copy of event items with new event item
 
-        localStorageSet("eventItems", modifiedEventItems);
+        databaseSet("eventItems", modifiedEventItems);
         setEventItems(modifiedEventItems);
       } else if (sameEventItem.events.length < 5) {
         /*
@@ -174,7 +182,7 @@ const Context = ({ children }) => {
       }
     });
 
-    localStorageSet("eventItems", formatedEventsItems);
+    databaseSet("eventItems", formatedEventsItems);
     setEventItems(formatedEventsItems);
   };
 
@@ -204,7 +212,7 @@ const Context = ({ children }) => {
       }
     });
 
-    localStorageSet("eventItems", modifiedEventItems);
+    databaseSet("eventItems", modifiedEventItems);
     setEventItems(modifiedEventItems);
   };
 
@@ -219,6 +227,7 @@ const Context = ({ children }) => {
           setEventItems,
           addNewEventItem,
           deleteEventItem,
+          valueOfDatabaseUsed,
         }}
       >
         {children}

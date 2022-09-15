@@ -6,7 +6,7 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Picker } from "./date-picker";
 import { getMonth } from "../../utility/functions";
 import { useCalendarDataContext } from "../../context/context";
-import { localStorageSet } from "../../utility/local-store";
+import { databaseSet } from "../../utility/control";
 
 const Header = () => {
   const { date, setDate } = useCalendarDataContext(); // Get data from Context component
@@ -24,12 +24,12 @@ const Header = () => {
       const lastMonthOfYear = new Date(date.getFullYear(), 11);
 
       setDate(lastMonthOfYear);
-      localStorageSet("date", lastMonthOfYear);
+      databaseSet("date", lastMonthOfYear);
     } else {
       const pervMonthDate = new Date(date.getFullYear(), date.getMonth() - 1); // Create date of the last month
 
       setDate(pervMonthDate);
-      localStorageSet("date", pervMonthDate);
+      databaseSet("date", pervMonthDate);
     }
   };
 
@@ -46,13 +46,13 @@ const Header = () => {
       const firstMonthOfYear = new Date(date.getFullYear(), 0);
 
       setDate(firstMonthOfYear);
-      localStorageSet("date", firstMonthOfYear);
+      databaseSet("date", firstMonthOfYear);
     } else {
       const nextMonthDate = new Date(date.getFullYear(), date.getMonth() + 1); // Create date of the next month
 
       console.log(nextMonthDate);
       setDate(nextMonthDate);
-      localStorageSet("date", nextMonthDate);
+      databaseSet("date", nextMonthDate);
     }
   };
 

@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
-import { useState } from "react";
 import { Item } from "./item/item";
-import { NAMES_OF_DAYS } from "../../utility/constants";
 import "./calendar.css";
-import { areEqual, getDayOfWeek, getMonthData } from "../../utility/functions";
+import { areEqual } from "../../utility/functions";
 import { useCalendarDataContext } from "../../context/context";
 
 const Calendar = () => {

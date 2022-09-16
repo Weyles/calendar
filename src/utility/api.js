@@ -1,6 +1,9 @@
+/*
+    Get data from the server
+*/
 const serverGet = async (name) => {
   try {
-    let response = await fetch(`https://some-api/${name}`);
+    let response = await fetch(`https://some-api/${name}`); // as a name we take only two values: "date", "iventItems"
     let json = await response.json();
     return json;
   } catch (error) {
@@ -8,6 +11,9 @@ const serverGet = async (name) => {
   }
 };
 
+/*
+    Set data to the server
+*/
 const serverSet = async (name, value) => {
   try {
     await fetch(`https://some-api/${name}`, {
@@ -22,6 +28,9 @@ const serverSet = async (name, value) => {
   }
 };
 
+/*
+    Delete all data in the chose data section
+*/
 const serverDelete = async (name) => {
     try {
       await fetch(`https://some-api/${name}`, {

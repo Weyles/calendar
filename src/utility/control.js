@@ -15,19 +15,27 @@ import {
 const typeOfDataBase = 1;
 
 const databaseGet = async (name) => {
-  if (name !== "date" || name !== "eventItems") {
+  if (name === "date" || name === "eventItems") {
+    switch (typeOfDataBase) {
+      case 1:
+        return await localStorageGet(name);
+      case 2:
+        return await serverGet(name);
+      case 3:
+        const dataFromLocalStorage = await localStorageGet(name);
+
+        if (!!dataFromLocalStorage) {
+          return dataFromLocalStorage;
+        } else {
+          return await serverGet(name);
+        }
+      default:
+        return null;
+    }
+  } else {
     console.log(
       "As a name this function can only take the following values: 'date' & 'eventItems'"
     );
-  }
-
-  const dataFromLocaleStorage = await localStorageGet(name);
-
-  if (!!dataFromLocaleStorage) {
-    return dataFromLocaleStorage;
-  } else {
-    const dataFromServer = await serverGet(name);
-    return dataFromServer;
   }
 };
 
@@ -36,43 +44,47 @@ const databaseSet = async (name, value) => {
     
   */
   if (name !== "date" || name !== "eventItems") {
+    switch (typeOfDataBase) {
+      case 1:
+        localStorageSet(name, value);
+        break;
+      case 2:
+        await serverSet(name, value);
+        break;
+      case 3:
+        localStorageSet(name, value);
+        await serverSet(name, value);
+        break;
+      default:
+        return null;
+    }
+  } else {
     console.log(
       "As a name this function can only take the following values: 'date' & 'eventItems'"
     );
-  }
-
-  if (typeOfDataBase === 1) {
-    localStorageSet(name, value);
-  }
-
-  if (typeOfDataBase === 2) {
-    await serverSet(name, value);
-  }
-
-  if (typeOfDataBase === 3) {
-    localStorageSet(name, value);
-    await serverSet(name, value);
   }
 };
 
 const databaseDelete = async (name) => {
   if (name !== "date" || name !== "eventItems") {
+    switch (typeOfDataBase) {
+      case 1:
+        localStorageDelete(name);
+        break;
+      case 2:
+        await serverDelete(name);
+        break;
+      case 3:
+        localStorageDelete(name);
+        await serverDelete(name);
+        break;
+      default:
+        return null;
+    }
+  } else {
     console.log(
       "As a name this function can only take the following values: 'date' & 'eventItems'"
     );
-  }
-
-  if (typeOfDataBase === 1) {
-    localStorageDelete(name);
-  }
-
-  if (typeOfDataBase === 2) {
-    await serverDelete(name);
-  }
-
-  if (typeOfDataBase === 3) {
-    localStorageDelete(name);
-    await serverDelete(name);
   }
 };
 

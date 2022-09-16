@@ -14,6 +14,12 @@ import {
 */
 const typeOfDataBase = 1;
 
+/*
+    All functions work by next principe:
+    1 - check if we passed right value (name)
+    2 - look what database should be used
+    3 - set, get or delete required data
+*/
 const databaseGet = async (name) => {
   if (name === "date" || name === "eventItems") {
     switch (typeOfDataBase) {
